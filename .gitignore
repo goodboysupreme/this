@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Env / secrets
+.env
+
+# Local databases
+*.db
+
+# Generated resume exports / uploads
+backend/uploads/
+
+# Raw datasets (may contain sensitive placement data)
+data/raw/*
+!data/raw/README.md
+
+# Node / Next.js (frontend, later phases)
+node_modules/
+.next/
+
+# Misc
+.DS_Store
