@@ -6,7 +6,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -35,9 +34,6 @@ import {
 } from "@/components/ui/table";
 import { OfflineState } from "@/components/OfflineState";
 import { EmptyState } from "@/components/EmptyState";
-import { FadeIn } from "@/components/FadeIn";
-
-const BAR_COLORS = ["#6366f1", "#8b5cf6", "#a78bfa", "#7c3aed", "#818cf8", "#c4b5fd"];
 
 type SortKey = "company" | "cutoff" | "comp" | "year";
 type SortDir = "asc" | "desc";
@@ -152,21 +148,17 @@ export function OfferExplorer({
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-      <FadeIn>
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="font-display text-4xl font-bold tracking-tight text-zinc-900 dark:text-white">
-              {title}
-            </h1>
-            <p className="mt-2 max-w-2xl text-zinc-500 dark:text-zinc-400">{description}</p>
-          </div>
-          {offers && (
-            <Badge variant="indigo" className="text-sm">
-              {filtered.length} of {offers.length} offers
-            </Badge>
-          )}
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{title}</h1>
+          <p className="mt-2 max-w-2xl text-muted">{description}</p>
         </div>
-      </FadeIn>
+        {offers && (
+          <Badge variant="accent" className="stat-num text-sm">
+            {filtered.length} of {offers.length} offers
+          </Badge>
+        )}
+      </div>
 
       {offers === null ? (
         <div className="mt-10">
@@ -175,240 +167,232 @@ export function OfferExplorer({
       ) : (
         <>
           {/* Filter bar */}
-          <FadeIn delay={0.1}>
-            <div className="sticky top-[68px] z-30 mt-8">
-              <Card className="bg-white/90 shadow-lg shadow-zinc-900/[0.03] backdrop-blur-xl dark:bg-[#0c0c14]/90 dark:shadow-black/20">
-                <CardContent className="flex flex-wrap items-center gap-3 py-4">
-                  <span className="flex items-center gap-2 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                    <SlidersHorizontal className="h-4 w-4" /> Filters
-                    {activeFilters > 0 && <Badge variant="indigo">{activeFilters}</Badge>}
-                  </span>
-                  <div className="relative min-w-[200px] flex-1">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                    <Input
-                      className="pl-9"
-                      placeholder="Search company or role…"
-                      value={filters.search}
-                      onChange={set("search")}
-                    />
-                  </div>
-                  <Select className="w-32" value={filters.year} onChange={set("year")}>
-                    <option value="">All years</option>
-                    {years.map((y) => (
-                      <option key={y} value={y}>{y}</option>
-                    ))}
-                  </Select>
-                  <Select className="w-44" value={filters.branch} onChange={set("branch")}>
-                    <option value="">All branches</option>
-                    {branches.map((b) => (
-                      <option key={b} value={b}>{b}</option>
-                    ))}
-                  </Select>
-                  <Select className="w-44" value={filters.roleCategory} onChange={set("roleCategory")}>
-                    <option value="">All role types</option>
-                    {roleCategories.map((r) => (
-                      <option key={r} value={r}>{r}</option>
-                    ))}
-                  </Select>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      className="w-24"
-                      type="number"
-                      step="0.1"
-                      min="0"
-                      max="10"
-                      placeholder="Min CG"
-                      value={filters.minCg}
-                      onChange={set("minCg")}
-                    />
-                    <span className="text-zinc-400">–</span>
-                    <Input
-                      className="w-24"
-                      type="number"
-                      step="0.1"
-                      min="0"
-                      max="10"
-                      placeholder="Max CG"
-                      value={filters.maxCg}
-                      onChange={set("maxCg")}
-                    />
-                  </div>
+          <div className="sticky top-[68px] z-30 mt-8">
+            <Card>
+              <CardContent className="flex flex-wrap items-center gap-3 py-4">
+                <span className="flex items-center gap-2 text-sm font-medium text-muted">
+                  <SlidersHorizontal className="h-4 w-4" /> Filters
                   {activeFilters > 0 && (
-                    <button
-                      onClick={() => setFilters(EMPTY)}
-                      className="text-sm font-medium text-indigo-500 hover:underline dark:text-indigo-300"
-                    >
-                      Clear all
-                    </button>
+                    <Badge variant="accent" className="stat-num">
+                      {activeFilters}
+                    </Badge>
                   )}
-                </CardContent>
+                </span>
+                <div className="relative min-w-[200px] flex-1">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+                  <Input
+                    className="pl-9"
+                    placeholder="Search company or role…"
+                    value={filters.search}
+                    onChange={set("search")}
+                  />
+                </div>
+                <Select className="w-32" value={filters.year} onChange={set("year")}>
+                  <option value="">All years</option>
+                  {years.map((y) => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </Select>
+                <Select className="w-44" value={filters.branch} onChange={set("branch")}>
+                  <option value="">All branches</option>
+                  {branches.map((b) => (
+                    <option key={b} value={b}>{b}</option>
+                  ))}
+                </Select>
+                <Select className="w-44" value={filters.roleCategory} onChange={set("roleCategory")}>
+                  <option value="">All role types</option>
+                  {roleCategories.map((r) => (
+                    <option key={r} value={r}>{r}</option>
+                  ))}
+                </Select>
+                <div className="flex items-center gap-2">
+                  <Input
+                    className="w-24"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="10"
+                    placeholder="Min CG"
+                    value={filters.minCg}
+                    onChange={set("minCg")}
+                  />
+                  <span className="text-muted">–</span>
+                  <Input
+                    className="w-24"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="10"
+                    placeholder="Max CG"
+                    value={filters.maxCg}
+                    onChange={set("maxCg")}
+                  />
+                </div>
                 {activeFilters > 0 && (
-                  <div className="flex flex-wrap items-center gap-2 border-t border-zinc-100 px-6 py-2.5 dark:border-white/5">
-                    {(
-                      [
-                        ["year", filters.year && `Year ${filters.year}`],
-                        ["branch", filters.branch],
-                        ["roleCategory", filters.roleCategory],
-                        ["minCg", filters.minCg && `CG ≥ ${filters.minCg}`],
-                        ["maxCg", filters.maxCg && `CG ≤ ${filters.maxCg}`],
-                        ["search", filters.search && `“${filters.search}”`],
-                      ] as [keyof Filters, string | false][]
-                    )
-                      .filter(([, label]) => Boolean(label))
-                      .map(([key, label]) => (
-                        <button
-                          key={key}
-                          onClick={() => clearFilter(key)}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-600 transition-colors hover:bg-indigo-500/20 dark:text-indigo-300"
-                        >
-                          {label}
-                          <X className="h-3 w-3" />
-                        </button>
-                      ))}
-                  </div>
+                  <button
+                    onClick={() => setFilters(EMPTY)}
+                    className="text-sm font-medium text-accent hover:underline"
+                  >
+                    Clear all
+                  </button>
                 )}
-              </Card>
-            </div>
-          </FadeIn>
+              </CardContent>
+              {activeFilters > 0 && (
+                <div className="flex flex-wrap items-center gap-2 border-t border-line px-6 py-2.5">
+                  {(
+                    [
+                      ["year", filters.year && `Year ${filters.year}`],
+                      ["branch", filters.branch],
+                      ["roleCategory", filters.roleCategory],
+                      ["minCg", filters.minCg && `CG ≥ ${filters.minCg}`],
+                      ["maxCg", filters.maxCg && `CG ≤ ${filters.maxCg}`],
+                      ["search", filters.search && `“${filters.search}”`],
+                    ] as [keyof Filters, string | false][]
+                  )
+                    .filter(([, label]) => Boolean(label))
+                    .map(([key, label]) => (
+                      <button
+                        key={key}
+                        onClick={() => clearFilter(key)}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-2.5 py-1 text-xs font-medium text-muted transition-colors hover:text-ink"
+                      >
+                        {label}
+                        <X className="h-3 w-3" />
+                      </button>
+                    ))}
+                </div>
+              )}
+            </Card>
+          </div>
 
           {/* Charts */}
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
-            <FadeIn delay={0.15}>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Offers by year</CardTitle>
-                </CardHeader>
-                <CardContent className="h-64">
-                  {offersByYear.length > 0 ? (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={offersByYear}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" opacity={0.4} />
-                        <XAxis dataKey="year" stroke="#71717a" fontSize={12} />
-                        <YAxis allowDecimals={false} stroke="#71717a" fontSize={12} />
-                        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "#6366f1", opacity: 0.08 }} />
-                        <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-                          {offersByYear.map((_, i) => (
-                            <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <EmptyChart />
-                  )}
-                </CardContent>
-              </Card>
-            </FadeIn>
-            <FadeIn delay={0.2}>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">CGPA cutoff distribution</CardTitle>
-                </CardHeader>
-                <CardContent className="h-64">
-                  {cutoffDist.length > 0 ? (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={cutoffDist}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" opacity={0.4} />
-                        <XAxis dataKey="range" stroke="#71717a" fontSize={12} />
-                        <YAxis allowDecimals={false} stroke="#71717a" fontSize={12} />
-                        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "#8b5cf6", opacity: 0.08 }} />
-                        <Bar dataKey="count" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <EmptyChart />
-                  )}
-                </CardContent>
-              </Card>
-            </FadeIn>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Offers by year</CardTitle>
+              </CardHeader>
+              <CardContent className="h-64">
+                {offersByYear.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={offersByYear}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="oklch(var(--line))" opacity={0.4} />
+                      <XAxis dataKey="year" stroke="oklch(var(--muted))" fontSize={12} />
+                      <YAxis allowDecimals={false} stroke="oklch(var(--muted))" fontSize={12} />
+                      <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "oklch(var(--accent) / 0.08)" }} />
+                      <Bar dataKey="count" fill="oklch(var(--accent))" radius={[6, 6, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <EmptyChart />
+                )}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">CGPA cutoff distribution</CardTitle>
+              </CardHeader>
+              <CardContent className="h-64">
+                {cutoffDist.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={cutoffDist}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="oklch(var(--line))" opacity={0.4} />
+                      <XAxis dataKey="range" stroke="oklch(var(--muted))" fontSize={12} />
+                      <YAxis allowDecimals={false} stroke="oklch(var(--muted))" fontSize={12} />
+                      <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "oklch(var(--accent) / 0.08)" }} />
+                      <Bar dataKey="count" fill="oklch(var(--accent))" radius={[6, 6, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <EmptyChart />
+                )}
+              </CardContent>
+            </Card>
           </div>
 
           {/* Table */}
-          <FadeIn delay={0.25}>
-            <Card className="mt-6">
-              <Table>
-                <TableHeader>
-                  <TableRow className="even:bg-transparent hover:bg-transparent dark:even:bg-transparent">
-                    <TableHead>
-                      <SortButton label="Company" active={sort} k="company" onToggle={toggleSort} />
-                    </TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Branch</TableHead>
-                    <TableHead>
-                      <SortButton label="CG cutoff" active={sort} k="cutoff" onToggle={toggleSort} />
-                    </TableHead>
-                    <TableHead>
-                      <SortButton label={compensationLabel(type)} active={sort} k="comp" onToggle={toggleSort} />
-                    </TableHead>
-                    <TableHead className="text-right">
-                      <SortButton label="Year" active={sort} k="year" onToggle={toggleSort} className="ml-auto" />
-                    </TableHead>
+          <Card className="mt-6">
+            <Table>
+              <TableHeader>
+                <TableRow className="even:bg-transparent hover:bg-transparent dark:even:bg-transparent dark:hover:bg-transparent">
+                  <TableHead className="sticky left-0 z-10 bg-surface">
+                    <SortButton label="Company" active={sort} k="company" onToggle={toggleSort} />
+                  </TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Branch</TableHead>
+                  <TableHead className="text-right">
+                    <SortButton label="CG cutoff" active={sort} k="cutoff" onToggle={toggleSort} className="ml-auto" />
+                  </TableHead>
+                  <TableHead className="text-right">
+                    <SortButton label={compensationLabel(type)} active={sort} k="comp" onToggle={toggleSort} className="ml-auto" />
+                  </TableHead>
+                  <TableHead className="text-right">
+                    <SortButton label="Year" active={sort} k="year" onToggle={toggleSort} className="ml-auto" />
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="[&_td]:py-2.5">
+                {filtered.slice(0, 200).map((o) => (
+                  <TableRow key={o.id}>
+                    <TableCell className="sticky left-0 z-10 bg-surface">
+                      <Link
+                        href={`/company/${o.company_slug}`}
+                        className="font-medium text-ink transition-colors hover:text-accent"
+                      >
+                        {o.company_name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <span>{o.role}</span>
+                        {o.role_category && (
+                          <span className="text-xs text-muted">{o.role_category}</span>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>{o.branch || "–"}</TableCell>
+                    <TableCell className="text-right">
+                      <span
+                        className={cn(
+                          "stat-num",
+                          o.cgpa_cutoff !== null && o.cgpa_cutoff >= 8.5 ? "text-warn" : ""
+                        )}
+                      >
+                        {formatCutoff(o.cgpa_cutoff)}
+                      </span>
+                    </TableCell>
+                    <TableCell className="stat-num text-right font-medium">
+                      {formatCompensation(type, o.stipend_ctc)}
+                    </TableCell>
+                    <TableCell className="stat-num text-right text-muted">{o.year}</TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filtered.slice(0, 200).map((o) => (
-                    <TableRow key={o.id}>
-                      <TableCell>
-                        <Link
-                          href={`/company/${o.company_slug}`}
-                          className="font-medium text-indigo-500 hover:underline dark:text-indigo-300"
+                ))}
+                {filtered.length === 0 && (
+                  <TableRow className="hover:bg-transparent dark:hover:bg-transparent">
+                    <TableCell colSpan={6}>
+                      <EmptyState
+                        title="No offers match these filters"
+                        description="Try widening the CGPA range or clearing a filter. The dataset only includes offers on record."
+                      >
+                        <button
+                          onClick={() => setFilters(EMPTY)}
+                          className="mt-1 text-sm font-medium text-accent hover:underline"
                         >
-                          {o.company_name}
-                        </Link>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col">
-                          <span>{o.role}</span>
-                          {o.role_category && (
-                            <span className="text-xs text-zinc-400 dark:text-zinc-500">{o.role_category}</span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>{o.branch || "—"}</TableCell>
-                      <TableCell>
-                        <span
-                          className={cn(
-                            "font-mono",
-                            o.cgpa_cutoff !== null && o.cgpa_cutoff >= 8.5
-                              ? "text-amber-500 dark:text-amber-300"
-                              : ""
-                          )}
-                        >
-                          {formatCutoff(o.cgpa_cutoff)}
-                        </span>
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {formatCompensation(type, o.stipend_ctc)}
-                      </TableCell>
-                      <TableCell className="text-right text-zinc-500 dark:text-zinc-400">{o.year}</TableCell>
-                    </TableRow>
-                  ))}
-                  {filtered.length === 0 && (
-                    <TableRow className="hover:bg-transparent dark:hover:bg-transparent">
-                      <TableCell colSpan={6}>
-                        <EmptyState
-                          title="No offers match these filters"
-                          description="Try widening the CGPA range or clearing a filter — the dataset only includes offers on record."
-                        >
-                          <button
-                            onClick={() => setFilters(EMPTY)}
-                            className="mt-1 text-sm font-medium text-indigo-500 hover:underline dark:text-indigo-300"
-                          >
-                            Clear all filters
-                          </button>
-                        </EmptyState>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-              {filtered.length > 200 && (
-                <p className="border-t border-zinc-100 px-4 py-3 text-xs text-zinc-500 dark:border-white/5">
-                  Showing first 200 of {filtered.length} results — narrow the filters to see more.
-                </p>
-              )}
-            </Card>
-          </FadeIn>
+                          Clear all filters
+                        </button>
+                      </EmptyState>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+            {filtered.length > 200 && (
+              <p className="border-t border-line px-4 py-3 text-xs text-muted">
+                Showing first <span className="stat-num">200</span> of{" "}
+                <span className="stat-num">{filtered.length}</span> results. Narrow the filters to
+                see more.
+              </p>
+            )}
+          </Card>
         </>
       )}
     </div>
@@ -416,16 +400,16 @@ export function OfferExplorer({
 }
 
 const tooltipStyle: React.CSSProperties = {
-  backgroundColor: "#18181b",
-  border: "1px solid rgba(255,255,255,0.1)",
+  backgroundColor: "oklch(var(--surface))",
+  border: "1px solid oklch(var(--line))",
   borderRadius: "0.5rem",
-  color: "#fafafa",
+  color: "oklch(var(--ink))",
   fontSize: "0.8rem",
 };
 
 function EmptyChart() {
   return (
-    <div className="flex h-full items-center justify-center text-sm text-zinc-500">
+    <div className="flex h-full items-center justify-center text-sm text-muted">
       No data for the current filters.
     </div>
   );
@@ -449,8 +433,8 @@ function SortButton({
     <button
       onClick={() => onToggle(k)}
       className={cn(
-        "inline-flex items-center gap-1 uppercase tracking-wider transition-colors hover:text-indigo-500 dark:hover:text-indigo-300",
-        active?.key === k && "text-indigo-500 dark:text-indigo-300",
+        "inline-flex items-center gap-1 uppercase tracking-wider transition-colors hover:text-ink",
+        active?.key === k && "text-accent",
         className
       )}
     >

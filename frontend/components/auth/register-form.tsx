@@ -27,9 +27,9 @@ export function RegisterForm() {
       router.push("/dashboard");
       router.refresh();
     } else if (res.status === 409) {
-      setError("An account with this email already exists — try signing in instead.");
+      setError("An account with this email already exists. Try signing in instead.");
     } else {
-      setError(authErrorMessage(res.status, "Registration failed — please try again."));
+      setError(authErrorMessage(res.status, "Registration failed. Please try again."));
     }
   }
 
@@ -44,7 +44,7 @@ export function RegisterForm() {
       footer={
         <>
           Already have an account?{" "}
-          <Link href="/login" className="font-medium text-indigo-500 hover:underline dark:text-indigo-300">
+          <Link href="/login" className="font-medium text-accent hover:underline">
             Sign in
           </Link>
         </>

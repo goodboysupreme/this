@@ -5,8 +5,8 @@ export function ExplorerSkeleton() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
       {/* header */}
-      <Skeleton className="h-10 w-64" />
-      <Skeleton className="mt-3 h-5 w-full max-w-2xl" />
+      <Skeleton className="h-8 w-56" />
+      <Skeleton className="mt-3 h-4 w-full max-w-xl" />
 
       {/* filter bar */}
       <Card className="mt-8">

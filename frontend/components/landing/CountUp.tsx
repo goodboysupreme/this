@@ -27,5 +27,5 @@ export function CountUp({ value, duration = 1.4 }: { value: number; duration?: n
     return () => cancelAnimationFrame(raf);
   }, [inView, reduce, value, duration]);
 
-  return <span ref={ref}>{display.toLocaleString("en-IN")}</span>;
+  return <span ref={ref} className="stat-num">{display.toLocaleString("en-IN")}</span>;
 }

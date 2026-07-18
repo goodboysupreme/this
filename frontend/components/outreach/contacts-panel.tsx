@@ -46,7 +46,7 @@ export function ContactsPanel({
     setUploading(false);
     if (inputRef.current) inputRef.current.value = "";
     if (!res) {
-      setError("Import failed — the backend may be offline.");
+      setError("Import failed. The backend may be offline.");
       return;
     }
     setImportResult(res);
@@ -58,7 +58,7 @@ export function ContactsPanel({
     const ok = await deleteOutreachContact(id);
     setDeletingId(null);
     if (!ok) {
-      setError("Delete failed — the backend may be offline.");
+      setError("Delete failed. The backend may be offline.");
       return;
     }
     await onChanged();
@@ -90,28 +90,37 @@ export function ContactsPanel({
               className="hidden"
               onChange={(e) => upload(e.target.files?.[0])}
             />
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Columns: <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs dark:bg-white/10">name,role,company,email</code>{" "}
-              —{" "}
+            <p className="text-sm text-muted">
+              Columns:{" "}
+              <code className="rounded bg-line/60 px-1.5 py-0.5 text-xs">
+                name,role,company,email
+              </code>
+              .{" "}
               <a
                 href={SAMPLE_CSV}
                 download="contacts-sample.csv"
-                className="inline-flex items-center gap-1 font-medium text-indigo-500 hover:underline dark:text-indigo-300"
+                className="inline-flex items-center gap-1 font-medium text-accent hover:underline"
               >
                 <Download className="h-3.5 w-3.5" /> sample CSV
               </a>
             </p>
           </div>
           {importResult && (
-            <p className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-600 dark:text-emerald-300">
-              Imported {importResult.imported} contact{importResult.imported === 1 ? "" : "s"}
-              {importResult.skipped > 0 &&
-                ` · skipped ${importResult.skipped} invalid/duplicate row${importResult.skipped === 1 ? "" : "s"}`}
+            <p className="rounded-lg border border-success/30 bg-success-soft px-4 py-3 text-sm text-success">
+              Imported <span className="stat-num">{importResult.imported}</span> contact
+              {importResult.imported === 1 ? "" : "s"}
+              {importResult.skipped > 0 && (
+                <>
+                  {" · skipped "}
+                  <span className="stat-num">{importResult.skipped}</span> invalid/duplicate row
+                  {importResult.skipped === 1 ? "" : "s"}
+                </>
+              )}
               .
             </p>
           )}
           {error && (
-            <p className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-300">
+            <p className="rounded-lg border border-danger/30 bg-danger-soft px-4 py-3 text-sm text-danger">
               {error}
             </p>
           )}
@@ -125,11 +134,11 @@ export function ContactsPanel({
       ) : contacts.length === 0 ? (
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-500/10">
-              <Users className="h-6 w-6 text-indigo-400" />
+            <span className="flex h-12 w-12 items-center justify-center rounded-md border border-line bg-surface text-muted">
+              <Users className="h-6 w-6" />
             </span>
-            <p className="font-medium text-zinc-800 dark:text-zinc-200">No contacts yet</p>
-            <p className="max-w-md text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="font-medium text-ink">No contacts yet</p>
+            <p className="max-w-md text-sm text-muted">
               Upload a CSV above to build your outreach list.
             </p>
           </CardContent>
@@ -149,18 +158,16 @@ export function ContactsPanel({
             <TableBody>
               {contacts.map((c) => (
                 <TableRow key={c.id}>
-                  <TableCell className="font-medium text-zinc-900 dark:text-zinc-100">
-                    {c.name}
-                  </TableCell>
-                  <TableCell>{c.role}</TableCell>
-                  <TableCell>{c.company}</TableCell>
-                  <TableCell className="text-zinc-500 dark:text-zinc-400">{c.email}</TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="px-4 py-2.5 font-medium text-ink">{c.name}</TableCell>
+                  <TableCell className="px-4 py-2.5">{c.role}</TableCell>
+                  <TableCell className="px-4 py-2.5">{c.company}</TableCell>
+                  <TableCell className="px-4 py-2.5 text-muted">{c.email}</TableCell>
+                  <TableCell className="px-4 py-2.5 text-right">
                     <button
                       aria-label={`Delete ${c.name}`}
                       onClick={() => remove(c.id)}
                       disabled={deletingId === c.id}
-                      className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-red-500/10 hover:text-red-500 disabled:opacity-50"
+                      className="rounded-md p-2 text-muted transition-colors hover:bg-danger-soft hover:text-danger disabled:opacity-50"
                     >
                       {deletingId === c.id ? (
                         <Loader2 className="h-4 w-4 animate-spin" />

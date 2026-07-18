@@ -10,7 +10,7 @@ export default async function PS1Page() {
     <OfferExplorer
       type="ps1"
       title="PS-1 Stations"
-      description="First Practice School stations — stipends, domains and historical allocation data to plan your preferences."
+      description="First Practice School stations: stipends, domains and historical allocation data to plan your preferences."
       offers={offers}
     />
   );

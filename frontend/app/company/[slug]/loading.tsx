@@ -5,7 +5,7 @@ export default function Loading() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
       <div className="flex items-center gap-5">
-        <Skeleton className="h-16 w-16 rounded-2xl" />
+        <Skeleton className="h-16 w-16 rounded-lg" />
         <div className="flex-1">
           <Skeleton className="h-9 w-64" />
           <Skeleton className="mt-3 h-5 w-full max-w-xl" />

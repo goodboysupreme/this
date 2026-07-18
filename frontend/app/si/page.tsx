@@ -10,7 +10,7 @@ export default async function SIPage() {
     <OfferExplorer
       type="si"
       title="Summer Internships"
-      description="SI offers across years — monthly stipends, roles and shortlist cutoffs for on-campus internship season."
+      description="SI offers across years: monthly stipends, roles and shortlist cutoffs for on-campus internship season."
       offers={offers}
     />
   );

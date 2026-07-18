@@ -101,21 +101,19 @@ function KeyGate({
 
   return (
     <div className="mx-auto flex max-w-md flex-col items-center px-4 py-24 sm:px-6">
-      <span className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/30">
-        <KeyRound className="h-7 w-7 text-white" />
+      <span className="mb-6 flex h-12 w-12 items-center justify-center rounded-md border border-line bg-surface text-muted">
+        <KeyRound className="h-6 w-6" />
       </span>
-      <h1 className="font-display text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-        Admin access
-      </h1>
-      <p className="mt-2 text-center text-sm text-zinc-500 dark:text-zinc-400">
+      <h1 className="text-3xl font-semibold tracking-tight text-ink">Admin access</h1>
+      <p className="mt-2 text-center text-sm text-muted">
         Enter the admin key to moderate experiences, upload datasets and view analytics.
       </p>
       <form
         onSubmit={submit}
-        className="mt-8 w-full rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:shadow-none dark:backdrop-blur-sm"
+        className="mt-8 w-full rounded-lg border border-line bg-surface p-6"
       >
         {invalid && (
-          <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2.5 text-sm text-red-600 dark:text-red-300">
+          <div className="mb-4 flex items-center gap-2 rounded-md border border-danger/30 bg-danger-soft px-3 py-2.5 text-sm text-danger">
             <ShieldAlert className="h-4 w-4 shrink-0" /> Invalid admin key.
           </div>
         )}
@@ -126,7 +124,7 @@ function KeyGate({
           placeholder="Admin key"
           autoFocus
         />
-        <Button type="submit" variant="glow" className="mt-4 w-full">
+        <Button type="submit" variant="default" className="mt-4 w-full">
           Unlock
         </Button>
       </form>
@@ -137,10 +135,8 @@ function KeyGate({
 function AdminPanels({ adminKey, onForbidden }: { adminKey: string; onForbidden: () => void }) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-      <h1 className="font-display text-3xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
-        Admin console
-      </h1>
-      <p className="mt-2 text-zinc-500 dark:text-zinc-400">
+      <h1 className="text-3xl font-semibold tracking-tight text-ink">Admin console</h1>
+      <p className="mt-2 text-muted">
         Moderation, dataset imports and site analytics.
       </p>
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
@@ -200,40 +196,41 @@ function PendingPanel({ adminKey, onForbidden }: { adminKey: string; onForbidden
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           Pending experiences
-          {pending && pending.length > 0 && <Badge variant="warning">{pending.length}</Badge>}
+          {pending && pending.length > 0 && (
+            <Badge variant="warning" className="stat-num">
+              {pending.length}
+            </Badge>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {offline ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Backend unreachable — start it and refresh.
+          <p className="text-sm text-muted">
+            Backend unreachable. Start it and refresh.
           </p>
         ) : pending === null ? (
           <div className="flex flex-col gap-3">
             {[0, 1].map((i) => (
-              <div key={i} className="h-24 animate-pulse rounded-lg bg-zinc-200/40 dark:bg-white/5" />
+              <div key={i} className="h-24 animate-pulse rounded-lg bg-line/50" />
             ))}
           </div>
         ) : pending.length === 0 ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Nothing awaiting moderation.</p>
+          <p className="text-sm text-muted">Nothing awaiting moderation.</p>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="divide-y divide-line overflow-hidden rounded-lg border border-line">
             {pending.map((e) => (
-              <div
-                key={e.id}
-                className="rounded-lg border border-zinc-200 p-4 dark:border-white/10"
-              >
+              <div key={e.id} className="p-4">
                 <div className="mb-2 flex flex-wrap items-center gap-2">
-                  <Badge variant="indigo">{TYPE_LABELS[e.type] ?? e.type}</Badge>
-                  <Badge variant="outline">{e.year}</Badge>
-                  <span className="text-sm font-medium text-zinc-900 dark:text-white">
-                    {e.company_name}
-                  </span>
+                  <Badge variant="accent">{TYPE_LABELS[e.type] ?? e.type}</Badge>
+                  <Badge variant="outline" className="stat-num">
+                    {e.year}
+                  </Badge>
+                  <span className="text-sm font-medium text-ink">{e.company_name}</span>
                   {e.author_hint && (
-                    <span className="text-xs text-zinc-400">{e.author_hint}</span>
+                    <span className="text-xs text-muted">{e.author_hint}</span>
                   )}
                 </div>
-                <p className="whitespace-pre-line text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+                <p className="whitespace-pre-line text-sm leading-relaxed text-muted">
                   {e.content}
                 </p>
                 <div className="mt-3 flex gap-2">
@@ -247,7 +244,7 @@ function PendingPanel({ adminKey, onForbidden }: { adminKey: string; onForbidden
                   </Button>
                   <Button
                     size="sm"
-                    variant="outline"
+                    variant="danger"
                     disabled={acting === e.id}
                     onClick={() => moderate(e.id, "reject")}
                   >
@@ -292,7 +289,7 @@ function UploadPanel({ adminKey, onForbidden }: { adminKey: string; onForbidden:
     if (res.data) {
       setResult(res.data);
     } else {
-      setError(res.status === 0 ? "Backend unreachable." : "Upload failed — check the file format.");
+      setError(res.status === 0 ? "Backend unreachable." : "Upload failed. Check the file format.");
     }
   }
 
@@ -300,25 +297,26 @@ function UploadPanel({ adminKey, onForbidden }: { adminKey: string; onForbidden:
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Database className="h-4 w-4 text-indigo-400" /> Dataset upload
+          <Database className="h-4 w-4 text-muted" /> Dataset upload
         </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
           {result && (
-            <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-600 dark:text-emerald-300">
-              Imported {result.imported} row{result.imported === 1 ? "" : "s"}, skipped{" "}
-              {result.skipped}.
+            <div className="rounded-md border border-success/30 bg-success-soft px-3 py-2.5 text-sm text-success">
+              Imported <span className="stat-num">{result.imported}</span> row
+              {result.imported === 1 ? "" : "s"}, skipped{" "}
+              <span className="stat-num">{result.skipped}</span>.
             </div>
           )}
           {error && (
-            <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2.5 text-sm text-red-600 dark:text-red-300">
+            <div className="rounded-md border border-danger/30 bg-danger-soft px-3 py-2.5 text-sm text-danger">
               {error}
             </div>
           )}
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Kind</span>
+              <span className="text-sm font-medium text-ink">Kind</span>
               <Select value={kind} onChange={(e) => setKind(e.target.value as DatasetKind)}>
                 {DATASET_KINDS.map((k) => (
                   <option key={k} value={k}>
@@ -328,16 +326,16 @@ function UploadPanel({ adminKey, onForbidden }: { adminKey: string; onForbidden:
               </Select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">CSV file</span>
+              <span className="text-sm font-medium text-ink">CSV file</span>
               <input
                 type="file"
                 accept=".csv"
                 onChange={onFile}
-                className="text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-500/10 file:px-3 file:py-2 file:text-sm file:font-medium file:text-indigo-600 hover:file:bg-indigo-500/20 dark:text-zinc-400 dark:file:text-indigo-300"
+                className="text-sm text-muted file:mr-3 file:rounded-md file:border-0 file:bg-accent-soft file:px-3 file:py-2 file:text-sm file:font-medium file:text-accent"
               />
             </label>
           </div>
-          <Button type="submit" variant="glow" disabled={busy} className="self-start">
+          <Button type="submit" variant="default" disabled={busy} className="self-start">
             <Upload className="h-4 w-4" />
             {busy ? "Uploading…" : "Upload"}
           </Button>
@@ -366,16 +364,16 @@ function AnalyticsPanel({ adminKey, onForbidden }: { adminKey: string; onForbidd
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <BarChart3 className="h-4 w-4 text-violet-400" /> Analytics
+          <BarChart3 className="h-4 w-4 text-muted" /> Analytics
         </CardTitle>
       </CardHeader>
       <CardContent>
         {offline ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Backend unreachable — start it and refresh.
+          <p className="text-sm text-muted">
+            Backend unreachable. Start it and refresh.
           </p>
         ) : analytics === null ? (
-          <div className="h-32 animate-pulse rounded-lg bg-zinc-200/40 dark:bg-white/5" />
+          <div className="h-32 animate-pulse rounded-lg bg-line/50" />
         ) : (
           <>
             <div className="grid grid-cols-3 gap-4">
@@ -395,8 +393,10 @@ function AnalyticsPanel({ adminKey, onForbidden }: { adminKey: string; onForbidd
                   <TableBody>
                     {topPaths.map((p) => (
                       <TableRow key={p.path}>
-                        <TableCell className="font-mono text-xs">{p.path}</TableCell>
-                        <TableCell className="text-right font-medium">{p.count}</TableCell>
+                        <TableCell className="px-4 py-2.5 font-mono text-xs">{p.path}</TableCell>
+                        <TableCell className="stat-num px-4 py-2.5 text-right font-medium text-ink">
+                          {p.count}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -412,13 +412,11 @@ function AnalyticsPanel({ adminKey, onForbidden }: { adminKey: string; onForbidd
 
 function TotalStat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-lg border border-zinc-200 p-3 text-center dark:border-white/10">
-      <div className="font-display text-2xl font-bold text-zinc-900 dark:text-white">
+    <div className="rounded-lg border border-line p-3 text-center">
+      <div className="stat-num text-2xl font-semibold text-ink">
         {value.toLocaleString("en-IN")}
       </div>
-      <div className="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-        {label}
-      </div>
+      <div className="text-xs uppercase tracking-wider text-muted">{label}</div>
     </div>
   );
 }

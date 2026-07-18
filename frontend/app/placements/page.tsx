@@ -10,7 +10,7 @@ export default async function PlacementsPage() {
     <OfferExplorer
       type="placement"
       title="Placements Hub"
-      description="Every campus placement offer on record — roles, CTCs, CGPA cutoffs and branch eligibility, filterable by year."
+      description="Every campus placement offer on record: roles, CTCs, CGPA cutoffs and branch eligibility, filterable by year."
       offers={offers}
     />
   );

@@ -3,13 +3,38 @@
 @tailwind utilities;
 
 :root {
-  --background: 250 250 252;
-  --foreground: 12 12 20;
+  /* Light theme — pure white surface, crimson accent, warm-neutral ink */
+  --bg: 1 0 0;
+  --surface: 0.984 0.002 29;
+  --ink: 0.21 0.008 29;
+  --muted: 0.47 0.012 29;
+  --line: 0.918 0.004 29;
+  --accent: 0.52 0.19 29;
+  --accent-strong: 0.44 0.165 29;
+  --accent-soft: 0.95 0.02 29;
+  --success: 0.52 0.12 155;
+  --success-soft: 0.95 0.03 155;
+  --warn: 0.58 0.12 70;
+  --warn-soft: 0.96 0.03 80;
+  --danger: 0.5 0.19 24;
+  --danger-soft: 0.95 0.025 24;
 }
 
 .dark {
-  --background: 9 9 15;
-  --foreground: 240 240 248;
+  --bg: 0.16 0 0;
+  --surface: 0.205 0.001 29;
+  --ink: 0.93 0.004 29;
+  --muted: 0.67 0.008 29;
+  --line: 0.295 0.004 29;
+  --accent: 0.66 0.16 29;
+  --accent-strong: 0.72 0.15 29;
+  --accent-soft: 0.27 0.035 29;
+  --success: 0.7 0.13 155;
+  --success-soft: 0.28 0.04 155;
+  --warn: 0.78 0.12 75;
+  --warn-soft: 0.29 0.04 75;
+  --danger: 0.65 0.18 24;
+  --danger-soft: 0.28 0.05 24;
 }
 
 html {
@@ -22,138 +47,24 @@ html.dark {
 }
 
 body {
-  color: rgb(var(--foreground));
-  background: rgb(var(--background));
-  transition: background-color 300ms ease, color 300ms ease;
-}
-
-/* Smooth theme transition for elements that don't define their own transition */
-*,
-::before,
-::after {
-  transition-property: background-color, border-color;
-  transition-duration: 200ms;
+  color: oklch(var(--ink));
+  background: oklch(var(--bg));
 }
 
 ::selection {
-  background: rgb(99 102 241 / 0.35);
+  background: oklch(var(--accent) / 0.22);
   color: inherit;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgb(99 102 241 / 0.25);
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(99 102 241 / 0.45);
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-html {
-  scrollbar-color: rgb(99 102 241 / 0.35) transparent;
-  scrollbar-width: thin;
-}
-
-/* Consistent focus-visible ring */
 :focus-visible {
-  outline: 2px solid rgb(129 140 248 / 0.7);
+  outline: 2px solid oklch(var(--accent) / 0.75);
   outline-offset: 2px;
   border-radius: 4px;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
-@layer components {
-  .gradient-text {
-    @apply bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-500 bg-clip-text text-transparent;
-    background-size: 200% auto;
-    animation: gradient-shift 6s linear infinite;
-  }
-
-  .glass-card {
-    @apply rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-sm;
-  }
-
-  .hero-grid {
-    background-image:
-      linear-gradient(to right, rgb(99 102 241 / 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(99 102 241 / 0.06) 1px, transparent 1px);
-    background-size: 56px 56px;
-  }
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% center;
-  }
-  100% {
-    background-position: 200% center;
-  }
-}
-
-@keyframes float-slow {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* Ambient page glow */
-.page-glow::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  background:
-    radial-gradient(600px circle at 15% 0%, rgb(99 102 241 / 0.10), transparent 60%),
-    radial-gradient(700px circle at 85% 10%, rgb(139 92 246 / 0.08), transparent 60%);
-}
-
-.dark .page-glow::before {
-  background:
-    radial-gradient(600px circle at 15% 0%, rgb(99 102 241 / 0.16), transparent 60%),
-    radial-gradient(700px circle at 85% 10%, rgb(139 92 246 / 0.12), transparent 60%);
-}
-
-/* Subtle noise texture over the page */
-.page-glow::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.dark .page-glow::after {
-  opacity: 0.04;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-  .gradient-text {
-    animation: none;
   }
   *,
   ::before,
@@ -161,5 +72,20 @@ html {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  /* Data terminal numerals: mono, tabular, never wraps a number mid-digit */
+  .stat-num {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
   }
 }

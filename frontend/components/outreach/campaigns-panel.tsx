@@ -70,7 +70,7 @@ export function CampaignsPanel({
     });
     setSending(false);
     if (!res) {
-      setError("Couldn't create the campaign — the backend may be offline.");
+      setError("Couldn't create the campaign. The backend may be offline.");
       return;
     }
     setResult(res);
@@ -89,7 +89,7 @@ export function CampaignsPanel({
         <CardContent className="flex flex-col gap-5">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted">
                 Campaign name
               </label>
               <Input
@@ -100,7 +100,7 @@ export function CampaignsPanel({
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted">
                 Template
               </label>
               <Select
@@ -109,7 +109,7 @@ export function CampaignsPanel({
                 disabled={sending || templateList.length === 0}
               >
                 <option value="">
-                  {templateList.length === 0 ? "No templates — create one first" : "Select a template"}
+                  {templateList.length === 0 ? "No templates, create one first" : "Select a template"}
                 </option>
                 {templateList.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -122,35 +122,33 @@ export function CampaignsPanel({
 
           <div>
             <div className="mb-1.5 flex items-center justify-between">
-              <label className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted">
                 Recipients
               </label>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                {selected.size} selected
+              <span className="text-xs text-muted">
+                <span className="stat-num">{selected.size}</span> selected
               </span>
             </div>
             {contactList.length === 0 ? (
-              <p className="rounded-lg border border-dashed border-zinc-300 px-4 py-3 text-sm text-zinc-500 dark:border-white/15 dark:text-zinc-400">
-                No contacts yet — import a CSV in the Contacts tab first.
+              <p className="rounded-lg border border-dashed border-line px-4 py-3 text-sm text-muted">
+                No contacts yet, import a CSV in the Contacts tab first.
               </p>
             ) : (
-              <div className="max-h-56 overflow-y-auto rounded-lg border border-zinc-200 dark:border-white/10">
+              <div className="max-h-56 overflow-y-auto rounded-lg border border-line">
                 {contactList.map((c) => (
                   <label
                     key={c.id}
-                    className="flex cursor-pointer items-center gap-3 border-b border-zinc-100 px-4 py-2.5 transition-colors last:border-0 hover:bg-zinc-50 dark:border-white/5 dark:hover:bg-white/[0.03]"
+                    className="flex cursor-pointer items-center gap-3 border-b border-line px-4 py-2.5 transition-colors last:border-0 hover:bg-surface"
                   >
                     <input
                       type="checkbox"
                       checked={selected.has(c.id)}
                       onChange={() => toggleContact(c.id)}
                       disabled={sending}
-                      className="h-4 w-4 accent-indigo-500"
+                      className="h-4 w-4 accent-accent"
                     />
-                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                      {c.name}
-                    </span>
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                    <span className="text-sm font-medium text-ink">{c.name}</span>
+                    <span className="text-xs text-muted">
                       {c.role} · {c.company} · {c.email}
                     </span>
                   </label>
@@ -163,24 +161,19 @@ export function CampaignsPanel({
           <div
             className={cn(
               "flex items-center justify-between gap-4 rounded-lg border px-4 py-3",
-              dryRun
-                ? "border-amber-500/40 bg-amber-500/10"
-                : "border-zinc-200 dark:border-white/10"
+              dryRun ? "border-warn/40 bg-warn-soft" : "border-line"
             )}
           >
             <div className="flex items-center gap-3">
               <FlaskConical
-                className={cn(
-                  "h-5 w-5",
-                  dryRun ? "text-amber-500" : "text-zinc-400"
-                )}
+                className={cn("h-5 w-5", dryRun ? "text-warn" : "text-muted")}
               />
               <div>
-                <p className="text-sm font-semibold text-zinc-900 dark:text-white">Dry run</p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                <p className="text-sm font-semibold text-ink">Dry run</p>
+                <p className="text-xs text-muted">
                   {dryRun
-                    ? "No emails will be sent — the campaign is simulated and logged only."
-                    : "Live mode — emails will actually be sent via your SMTP below."}
+                    ? "No emails will be sent. The campaign is simulated and logged only."
+                    : "Live mode: emails will actually be sent via your SMTP below."}
                 </p>
               </div>
             </div>
@@ -192,36 +185,36 @@ export function CampaignsPanel({
               disabled={sending}
               className={cn(
                 "relative h-6 w-11 shrink-0 rounded-full transition-colors",
-                dryRun ? "bg-amber-500" : "bg-zinc-300 dark:bg-white/15"
+                dryRun ? "bg-warn" : "bg-line"
               )}
             >
               <span
                 className={cn(
-                  "absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all",
+                  "absolute top-0.5 h-5 w-5 rounded-full border border-line bg-white transition-all",
                   dryRun ? "left-[22px]" : "left-0.5"
                 )}
               />
             </button>
           </div>
           {dryRun && (
-            <p className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm font-medium text-amber-600 dark:text-amber-300">
-              Dry run — no emails will be sent.
+            <p className="rounded-lg border border-warn/40 bg-warn-soft px-4 py-3 text-sm font-medium text-warn">
+              Dry run: no emails will be sent.
             </p>
           )}
 
           {/* SMTP */}
           <fieldset disabled={dryRun || sending} className={cn(dryRun && "opacity-50")}>
-            <legend className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            <legend className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-muted">
               SMTP settings (required for live sending)
             </legend>
-            <div className="grid gap-3 rounded-lg border border-zinc-200 p-4 dark:border-white/10 sm:grid-cols-2">
+            <div className="grid gap-3 rounded-lg border border-line p-4 sm:grid-cols-2">
               <Input
-                placeholder="SMTP host — e.g. smtp.gmail.com"
+                placeholder="SMTP host, e.g. smtp.gmail.com"
                 value={smtp.host}
                 onChange={(e) => setSmtp((s) => ({ ...s, host: e.target.value }))}
               />
               <Input
-                placeholder="Port — e.g. 587"
+                placeholder="Port, e.g. 587"
                 type="number"
                 value={smtp.port}
                 onChange={(e) => setSmtp((s) => ({ ...s, port: Number(e.target.value) || 0 }))}
@@ -237,16 +230,16 @@ export function CampaignsPanel({
                 value={smtp.password}
                 onChange={(e) => setSmtp((s) => ({ ...s, password: e.target.value }))}
               />
-              <label className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+              <label className="flex items-center gap-2 text-sm text-ink">
                 <input
                   type="checkbox"
                   checked={smtp.use_tls}
                   onChange={(e) => setSmtp((s) => ({ ...s, use_tls: e.target.checked }))}
-                  className="h-4 w-4 accent-indigo-500"
+                  className="h-4 w-4 accent-accent"
                 />
                 Use TLS
               </label>
-              <p className="flex items-start gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="flex items-start gap-1.5 text-xs text-muted">
                 <ShieldAlert className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                 Credentials are used only for this send and are not stored by PlaceIQ.
               </p>
@@ -254,18 +247,20 @@ export function CampaignsPanel({
           </fieldset>
 
           {error && (
-            <p className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-300">
+            <p className="rounded-lg border border-danger/30 bg-danger-soft px-4 py-3 text-sm text-danger">
               {error}
             </p>
           )}
           {result && (
-            <p className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-600 dark:text-emerald-300">
-              Campaign #{result.campaign_id} created ({result.status}) — {result.sent} sent ·{" "}
-              {result.failed} failed · {result.dryrun} dry-run.
+            <p className="rounded-lg border border-success/30 bg-success-soft px-4 py-3 text-sm text-success">
+              Campaign <span className="stat-num">#{result.campaign_id}</span> created (
+              {result.status}): <span className="stat-num">{result.sent}</span> sent,{" "}
+              <span className="stat-num">{result.failed}</span> failed,{" "}
+              <span className="stat-num">{result.dryrun}</span> dry-run.
             </p>
           )}
           <div>
-            <Button variant="glow" onClick={submit} disabled={!canSubmit}>
+            <Button variant="default" onClick={submit} disabled={!canSubmit}>
               {sending ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" /> Creating…
@@ -288,41 +283,39 @@ export function CampaignsPanel({
       ) : campaigns.length === 0 ? (
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-500/10">
-              <Mail className="h-6 w-6 text-indigo-400" />
+            <span className="flex h-12 w-12 items-center justify-center rounded-md border border-line bg-surface text-muted">
+              <Mail className="h-6 w-6" />
             </span>
-            <p className="font-medium text-zinc-800 dark:text-zinc-200">No campaigns yet</p>
-            <p className="max-w-md text-sm text-zinc-500 dark:text-zinc-400">
-              Create your first campaign above — keep dry run on to rehearse safely.
+            <p className="font-medium text-ink">No campaigns yet</p>
+            <p className="max-w-md text-sm text-muted">
+              Create your first campaign above. Keep dry run on to rehearse safely.
             </p>
           </CardContent>
         </Card>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="divide-y divide-line overflow-hidden rounded-lg border border-line">
           {campaigns.map((c) => (
-            <Card key={c.id}>
-              <CardContent className="flex flex-wrap items-center gap-4 py-4">
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-semibold text-zinc-900 dark:text-white">{c.name}</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                    #{c.id}
-                    {c.created_at && ` · ${new Date(c.created_at).toLocaleString()}`}
-                  </p>
-                </div>
-                <div className="flex items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400">
-                  <span>
-                    <span className="font-semibold text-emerald-500">{c.sent ?? 0}</span> sent
-                  </span>
-                  <span>
-                    <span className="font-semibold text-red-500">{c.failed ?? 0}</span> failed
-                  </span>
-                  <span>
-                    <span className="font-semibold text-amber-500">{c.dryrun ?? 0}</span> dry-run
-                  </span>
-                </div>
-                <CampaignStatusBadge status={c.status} dryRun={c.dry_run} />
-              </CardContent>
-            </Card>
+            <div key={c.id} className="flex flex-wrap items-center gap-4 px-4 py-4 sm:px-6">
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-medium text-ink">{c.name}</p>
+                <p className="text-xs text-muted">
+                  <span className="stat-num">#{c.id}</span>
+                  {c.created_at && ` · ${new Date(c.created_at).toLocaleString()}`}
+                </p>
+              </div>
+              <div className="flex items-center gap-4 text-xs text-muted">
+                <span>
+                  <span className="stat-num font-semibold text-success">{c.sent ?? 0}</span> sent
+                </span>
+                <span>
+                  <span className="stat-num font-semibold text-danger">{c.failed ?? 0}</span> failed
+                </span>
+                <span>
+                  <span className="stat-num font-semibold text-warn">{c.dryrun ?? 0}</span> dry-run
+                </span>
+              </div>
+              <CampaignStatusBadge status={c.status} dryRun={c.dry_run} />
+            </div>
           ))}
         </div>
       )}

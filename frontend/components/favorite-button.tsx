@@ -44,10 +44,10 @@ export function FavoriteButton({
       aria-pressed={favorited}
       title={user ? (favorited ? "Remove from favorites" : "Save to favorites") : "Sign in to save favorites"}
       className={cn(
-        "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-all",
+        "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60",
         favorited
-          ? "border-rose-500/40 bg-rose-500/15 text-rose-500 shadow-lg shadow-rose-500/10"
-          : "border-zinc-300 text-zinc-400 hover:border-rose-400/50 hover:text-rose-400 dark:border-white/15"
+          ? "border-danger/40 bg-danger-soft text-danger"
+          : "border-line text-muted hover:border-danger/40 hover:text-danger"
       )}
     >
       <Heart className={cn("h-5 w-5", favorited && "fill-current")} />

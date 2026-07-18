@@ -10,7 +10,7 @@ export default async function PS2Page() {
     <OfferExplorer
       type="ps2"
       title="PS-2 Stations"
-      description="Final Practice School stations — stipends, roles and cutoff history, the data behind PPO season."
+      description="Final Practice School stations: stipends, roles and cutoff history, the data behind PPO season."
       offers={offers}
     />
   );

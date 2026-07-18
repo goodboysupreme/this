@@ -1,10 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Inbox, ListChecks, Mail, Users, FileText } from "lucide-react";
+import { ListChecks, Mail, Users, FileText } from "lucide-react";
 import type { Campaign, OutreachContact, OutreachTemplate } from "@/lib/types";
 import { getCampaigns, getOutreachContacts, getOutreachTemplates } from "@/lib/api";
-import { FadeIn } from "@/components/FadeIn";
 import { cn } from "@/lib/utils";
 import { ContactsPanel } from "./contacts-panel";
 import { TemplatesPanel } from "./templates-panel";
@@ -44,34 +43,27 @@ export function OutreachCentre() {
   }, [refreshContacts, refreshTemplates, refreshCampaigns]);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <FadeIn>
-        <div className="flex flex-col items-start gap-4">
-          <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/30">
-            <Inbox className="h-6 w-6 text-white" />
-          </span>
-          <h1 className="font-display text-3xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
-            Cold Email Centre
-          </h1>
-          <p className="max-w-2xl text-zinc-500 dark:text-zinc-400">
-            Manage referral and alumni outreach — import contacts, write templates, and send safe
-            batch campaigns through your own SMTP. Dry-run mode is on by default so nothing goes
-            out by accident.
-          </p>
-        </div>
-      </FadeIn>
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+      <div>
+        <h1 className="text-3xl font-semibold tracking-tight text-ink">Cold Email Centre</h1>
+        <p className="mt-3 max-w-2xl text-muted">
+          Manage referral and alumni outreach: import contacts, write templates, and send safe
+          batch campaigns through your own SMTP. Dry-run mode is on by default, so nothing goes
+          out by accident.
+        </p>
+      </div>
 
-      <FadeIn delay={0.1} className="mt-8">
-        <div className="flex flex-wrap gap-2 rounded-xl border border-zinc-200 bg-white p-1.5 dark:border-white/10 dark:bg-white/[0.03]">
+      <div className="mt-8">
+        <div className="flex flex-wrap gap-2 rounded-lg border border-line bg-surface p-1.5">
           {tabs.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
               className={cn(
-                "inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
+                "inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors duration-150",
                 tab === t.key
-                  ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-300"
-                  : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-100"
+                  ? "bg-accent-soft text-accent"
+                  : "text-muted hover:bg-line/50 hover:text-ink"
               )}
             >
               <t.icon className="h-4 w-4" />
@@ -79,7 +71,7 @@ export function OutreachCentre() {
             </button>
           ))}
         </div>
-      </FadeIn>
+      </div>
 
       <div className="mt-6">
         {tab === "contacts" && (

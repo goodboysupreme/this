@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
-/** Score band colors: red <50, amber 50–75, green >75. */
+/** Score band colors from design tokens: danger <50, warn 50-75, success >75. */
 export function scoreColor(score: number): string {
-  if (score < 50) return "#ef4444";
-  if (score <= 75) return "#f59e0b";
-  return "#10b981";
+  if (score < 50) return "oklch(var(--danger))";
+  if (score <= 75) return "oklch(var(--warn))";
+  return "oklch(var(--success))";
 }
 
 export function scoreLabel(score: number): string {
@@ -29,12 +29,17 @@ export function ScoreGauge({
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const color = scoreColor(clamped);
+  const reduce = useReducedMotion();
 
-  const [display, setDisplay] = useState(0);
+  const [display, setDisplay] = useState(() => (reduce ? clamped : 0));
   useEffect(() => {
+    if (reduce) {
+      setDisplay(clamped);
+      return;
+    }
     let frame: number;
     const start = performance.now();
-    const duration = 1100;
+    const duration = 250;
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
       const eased = 1 - Math.pow(1 - t, 3);
@@ -43,7 +48,7 @@ export function ScoreGauge({
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [clamped]);
+  }, [clamped, reduce]);
 
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
@@ -54,7 +59,7 @@ export function ScoreGauge({
           r={radius}
           fill="none"
           strokeWidth={strokeWidth}
-          className="stroke-zinc-200 dark:stroke-white/10"
+          className="stroke-line"
         />
         <motion.circle
           cx={size / 2}
@@ -67,16 +72,15 @@ export function ScoreGauge({
           strokeDasharray={circumference}
           initial={{ strokeDashoffset: circumference }}
           animate={{ strokeDashoffset: circumference * (1 - clamped / 100) }}
-          transition={{ duration: 1.1, ease: "easeOut" }}
-          style={{ filter: `drop-shadow(0 0 10px ${color}55)` }}
+          transition={reduce ? { duration: 0 } : { duration: 0.25, ease: "easeOut" }}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-display text-5xl font-bold" style={{ color }}>
+        <span className="stat-num text-5xl font-semibold" style={{ color }}>
           {display}
         </span>
-        <span className="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-          / 100 · {scoreLabel(clamped)}
+        <span className="text-xs uppercase tracking-wider text-muted">
+          <span className="stat-num">/ 100</span> · {scoreLabel(clamped)}
         </span>
       </div>
     </div>

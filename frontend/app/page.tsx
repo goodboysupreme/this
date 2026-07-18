@@ -7,19 +7,11 @@ import {
   FileSearch,
   Target,
   Mail,
-  Building,
-  Database,
-  TrendingUp,
   ArrowRight,
-  Compass,
-  Gauge,
-  Rocket,
 } from "lucide-react";
 import { getStatsSummary } from "@/lib/api";
 import { Hero } from "@/components/landing/Hero";
-import { CountUp } from "@/components/landing/CountUp";
 import { FadeIn } from "@/components/FadeIn";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 const pillars = [
@@ -29,7 +21,6 @@ const pillars = [
     icon: Briefcase,
     title: "Placements Hub",
     description: "CTCs, role categories and CGPA cutoffs for every campus placement season.",
-    accent: "from-indigo-500 to-blue-500",
   },
   {
     key: "ps1",
@@ -37,7 +28,6 @@ const pillars = [
     icon: FlaskConical,
     title: "PS-1",
     description: "First Practice School stations, stipends and branch-wise allocation history.",
-    accent: "from-violet-500 to-purple-500",
   },
   {
     key: "ps2",
@@ -45,7 +35,6 @@ const pillars = [
     icon: Building2,
     title: "PS-2",
     description: "Final-semester PS stations, PPO trends and what each station actually expects.",
-    accent: "from-fuchsia-500 to-pink-500",
   },
   {
     key: "si",
@@ -53,7 +42,6 @@ const pillars = [
     icon: Sun,
     title: "Summer Internships",
     description: "SI offers, monthly stipends and shortlist cutoffs across years.",
-    accent: "from-cyan-500 to-sky-500",
   },
 ];
 
@@ -62,7 +50,7 @@ const features = [
     href: "/resume",
     icon: FileSearch,
     title: "Resume Screener",
-    description: "AI-powered ATS scoring with an offline fallback engine — section-wise feedback and bullet rewrites.",
+    description: "ATS scoring with section-wise feedback and bullet rewrites. AI engine with offline fallback.",
   },
   {
     href: "/resume/jd-match",
@@ -80,22 +68,19 @@ const features = [
 
 const steps = [
   {
-    icon: Compass,
     title: "Explore the data",
     description:
-      "Browse every placement, PS and SI offer on record — filter by year, branch, role and CGPA cutoff.",
+      "Browse every placement, PS and SI offer on record, filtered by year, branch, role and CGPA cutoff.",
   },
   {
-    icon: Gauge,
     title: "Predict your cutoffs",
     description:
       "Each company page shows an expected CGPA cutoff with a confidence band and transparent methodology.",
   },
   {
-    icon: Rocket,
     title: "Prepare & apply",
     description:
-      "Screen your resume, match it to a JD, and run referral outreach — all without leaving PlaceIQ.",
+      "Screen your resume, match it to a JD, and run referral outreach, all without leaving PlaceIQ.",
   },
 ];
 
@@ -134,95 +119,62 @@ export default async function HomePage() {
       />
       <Hero stats={stats} />
 
-      {/* Live stats strip */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <FadeIn>
-          <Card className="relative overflow-hidden">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-400/60 to-transparent" />
-            <CardContent className="grid grid-cols-2 gap-6 py-8 sm:grid-cols-4">
-              <Stat icon={Building} label="Companies tracked" value={stats?.companies_count} />
-              <Stat icon={Database} label="Offers indexed" value={stats?.offers_count} />
-              <Stat
-                icon={Briefcase}
-                label="Placement offers"
-                value={stats?.offers_by_type?.placement}
-              />
-              <Stat
-                icon={TrendingUp}
-                label="Top recruiter"
-                text={stats?.top_recruiters?.[0]?.name}
-              />
-            </CardContent>
-          </Card>
-          {!stats && (
-            <p className="mt-3 text-center text-xs text-amber-500/80">
-              Live stats unavailable — backend offline. Everything else still works once it&apos;s up.
-            </p>
-          )}
-        </FadeIn>
-      </section>
-
       {/* Pillars */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <FadeIn>
-          <h2 className="text-center font-display text-3xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
-            Four pillars. <span className="gradient-text">One intelligence hub.</span>
+          <h2 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
+            Four datasets. One hub.
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-center text-zinc-500 dark:text-zinc-400">
-            Every dataset BITS students care about — explorable, filterable, and backed by cutoff
-            predictions with transparent methodology.
+          <p className="mt-3 max-w-2xl text-muted">
+            Every dataset BITS students care about: explorable, filterable, and backed by cutoff
+            estimates with transparent methodology.
           </p>
         </FadeIn>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {pillars.map((p, i) => (
-            <FadeIn key={p.key} delay={i * 0.08}>
-              <Link href={p.href} className="group block h-full">
-                <Card className="h-full transition-all duration-300 hover:-translate-y-1 hover:border-indigo-500/40 hover:shadow-lg hover:shadow-indigo-500/10">
-                  <CardContent className="flex h-full flex-col gap-4 py-6">
-                    <span
-                      className={`inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${p.accent} shadow-lg`}
-                    >
-                      <p.icon className="h-5 w-5 text-white" />
-                    </span>
-                    <div>
-                      <h3 className="font-semibold text-zinc-900 dark:text-white">{p.title}</h3>
-                      <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">{p.description}</p>
-                    </div>
-                    <span className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-indigo-500 dark:text-indigo-300">
-                      {stats?.offers_by_type?.[p.key] != null && (
-                        <Badge variant="indigo">{stats.offers_by_type[p.key]} offers</Badge>
-                      )}
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </CardContent>
-                </Card>
+        <FadeIn className="mt-8 overflow-hidden rounded-lg border border-line">
+          <div className="divide-y divide-line">
+            {pillars.map((p) => (
+              <Link
+                key={p.key}
+                href={p.href}
+                className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-4 transition-colors hover:bg-surface sm:grid-cols-[auto_1fr_auto_auto] sm:px-6"
+              >
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-line bg-surface text-muted transition-colors group-hover:border-accent/40 group-hover:text-accent">
+                  <p.icon className="h-4 w-4" />
+                </span>
+                <span>
+                  <span className="block font-medium text-ink">{p.title}</span>
+                  <span className="mt-0.5 block text-sm text-muted">{p.description}</span>
+                </span>
+                {stats?.offers_by_type?.[p.key] != null && (
+                  <span className="stat-num hidden text-sm font-medium text-muted sm:block">
+                    {stats.offers_by_type[p.key].toLocaleString("en-IN")} offers
+                  </span>
+                )}
+                <ArrowRight className="h-4 w-4 text-muted transition-transform group-hover:translate-x-1 group-hover:text-accent" />
               </Link>
-            </FadeIn>
-          ))}
-        </div>
+            ))}
+          </div>
+        </FadeIn>
       </section>
 
       {/* How it works */}
-      <section className="border-y border-zinc-200/60 bg-zinc-50/50 dark:border-white/5 dark:bg-white/[0.015]">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <section className="border-y border-line bg-surface">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
           <FadeIn>
-            <h2 className="text-center font-display text-3xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
+            <h2 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
               From data to offer, in three steps
             </h2>
           </FadeIn>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-10 md:grid-cols-3">
             {steps.map((s, i) => (
-              <FadeIn key={s.title} delay={i * 0.1}>
-                <div className="relative flex h-full flex-col gap-3 rounded-xl p-1">
-                  <span className="font-display text-sm font-semibold tracking-widest text-indigo-400/70">
+              <FadeIn key={s.title} delay={i * 0.08}>
+                <div className="flex h-full flex-col gap-3">
+                  <span className="stat-num text-sm font-semibold text-accent">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-500/20 bg-indigo-500/10">
-                    <s.icon className="h-5 w-5 text-indigo-500 dark:text-indigo-300" />
-                  </span>
-                  <h3 className="font-semibold text-zinc-900 dark:text-white">{s.title}</h3>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">{s.description}</p>
+                  <h3 className="font-semibold text-ink">{s.title}</h3>
+                  <p className="text-sm text-muted">{s.description}</p>
                 </div>
               </FadeIn>
             ))}
@@ -230,67 +182,41 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Live features */}
-      <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
+      {/* Toolkit */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <FadeIn>
-          <h2 className="text-center font-display text-3xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
+          <h2 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
             Beyond the data
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-center text-zinc-500 dark:text-zinc-400">
-            PlaceIQ is a full placement-prep toolkit — screen your resume, match it to a JD, and
-            run outreach, all in one place.
+          <p className="mt-3 max-w-2xl text-muted">
+            Screen your resume, match it to a JD, and run outreach, all in one place.
           </p>
         </FadeIn>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {features.map((f, i) => (
-            <FadeIn key={f.title} delay={i * 0.08}>
-              <Link href={f.href} className="group block h-full">
-                <Card className="h-full transition-all duration-300 hover:-translate-y-1 hover:border-indigo-500/40 hover:shadow-lg hover:shadow-indigo-500/10">
-                  <CardContent className="flex h-full flex-col gap-4 py-6">
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-500/20 bg-indigo-500/10">
-                        <f.icon className="h-5 w-5 text-indigo-500 dark:text-indigo-300" />
-                      </span>
-                      <Badge variant="success">Live</Badge>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-zinc-900 dark:text-white">{f.title}</h3>
-                      <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">{f.description}</p>
-                    </div>
-                    <span className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-indigo-500 dark:text-indigo-300">
-                      Open
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </CardContent>
-                </Card>
+        <FadeIn className="mt-8 overflow-hidden rounded-lg border border-line">
+          <div className="divide-y divide-line">
+            {features.map((f) => (
+              <Link
+                key={f.title}
+                href={f.href}
+                className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-4 transition-colors hover:bg-surface sm:px-6"
+              >
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-line bg-surface text-muted transition-colors group-hover:border-accent/40 group-hover:text-accent">
+                  <f.icon className="h-4 w-4" />
+                </span>
+                <span>
+                  <span className="flex items-center gap-2 font-medium text-ink">
+                    {f.title}
+                    <Badge variant="success">Live</Badge>
+                  </span>
+                  <span className="mt-0.5 block text-sm text-muted">{f.description}</span>
+                </span>
+                <ArrowRight className="h-4 w-4 text-muted transition-transform group-hover:translate-x-1 group-hover:text-accent" />
               </Link>
-            </FadeIn>
-          ))}
-        </div>
+            ))}
+          </div>
+        </FadeIn>
       </section>
-    </div>
-  );
-}
-
-function Stat({
-  icon: Icon,
-  label,
-  value,
-  text,
-}: {
-  icon: typeof Building;
-  label: string;
-  value?: number;
-  text?: string;
-}) {
-  return (
-    <div className="flex flex-col items-center gap-1.5 text-center">
-      <Icon className="h-5 w-5 text-indigo-400" />
-      <span className="font-display text-2xl font-bold text-zinc-900 dark:text-white sm:text-3xl">
-        {text ?? (value != null ? <CountUp value={value} /> : "—")}
-      </span>
-      <span className="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400">{label}</span>
     </div>
   );
 }
